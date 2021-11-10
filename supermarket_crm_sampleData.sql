@@ -7,27 +7,20 @@ INSERT INTO SUPERMARKET_BRANCH (hotline, `address`, `name`) VALUES
 -- ===================== EMPLOYEE ===================== --
 INSERT INTO EMPLOYEE VALUES
 (NULL, '233309782', '0373395726', 'Nguyễn Phúc Vinh', '4D, Trần Thị Vững, p.An Bình, Dĩ An, Bình Dương', 
-'2001-07-05', 'vinh.nguyen05072001@hcmut.edu.vn');
+'2001-07-05', 'vinh.nguyen05072001@hcmut.edu.vn', 1, '2021-09-17');
 
-INSERT INTO EMPLOYEE (identityCard, phone, `name`) VALUES
-('987654321', '0357896145', 'Vuơng Thanh Duyên'),
-('987654321', '0357896145', 'Lê Nghĩa'),
-('147852369', '0147852369', 'Nguyễn Văn A'),
-('321456987', '0147852369', 'Bùi Văn B');
-
-INSERT INTO ATPLACE_CARING_STAFF
-VALUES (8), -- Vương Thanh Duyên
-(6); -- Nguyễn Văn A
+INSERT INTO EMPLOYEE (identityCard, phone, `name`, SBranchID, startWorkingDate) VALUES
+('987654321', '0357896145', 'Vuơng Thanh Duyên', 1, '2021-09-17'),
+('145697682', '0357896145', 'Lê Nghĩa', 1, '2021-09-17'),
+('147852369', '0147852369', 'Nguyễn Văn A', 1, '2021-09-17'),
+('321456987', '0147852369', 'Bùi Văn B', 1, '2021-09-17');
 
 INSERT INTO MANAGER
 VALUES (1, 3); -- Nguyễn Phúc Vinh
 
 INSERT INTO AFTER_SELLING_STAFF
-VALUES (5), -- Lê Nghĩa
-(7); -- Bùi Văn B
-
-UPDATE EMPLOYEE
-SET SBranchID = 1, startWorkingDate = '2021-09-17';
+VALUES (3), -- Lê Nghĩa
+(5); -- Bùi Văn B
 
 -- ===================== CATEGORY ===================== --
 INSERT INTO CATEGORY VALUES
@@ -46,16 +39,17 @@ INSERT INTO PRODUCT VALUES
 (NULL, 'Gạo 5kg', '2020-08-11', NULL, 80000, 'Hàn Quốc', 10, NULL, 'Thực phẩm khô');
 
 -- ===================== FAVOUR ===================== --
-INSERT INTO FAVOUR VALUES
+INSERT INTO FAVOUR (ID, `name`, `content`, startDate, endDate, mssn) VALUES
 (NULL, 'Giảm giá 20/11', 'Giảm giá hàng năm nhân ngày lễ 20/11', '2021-11-20', '2021-11-24', 1),
-(NULL, 'Giamr giá lễ Noel', NULL, '2021-12-25', '2021-12-27', 1);
+(NULL, 'Giamr giá lễ Noel', NULL, '2021-12-25', '2021-12-27', 1),
+(NULL, 'ăn sale 11/11/2021', NULL, '2021-11-11', NULL, 1);
 
 -- ===================== VOUCHER_COUPON ===================== --
 INSERT INTO VOUCHER_COUPON VALUES
-(NULL, 'voucher', 'y', 3),
-(NULL, 'voucher', 'n', 3),
-(NULL, 'coupon', 'n', 3),
-(NULL, 'coupon', 'y', 3);
+(NULL, 'voucher', 'y', 1),
+(NULL, 'voucher', 'n', 1),
+(NULL, 'coupon', 'n', 1),
+(NULL, 'coupon', 'y', 1);
 
 -- ===================== CUSTOMER ===================== --
 INSERT INTO CUSTOMER VALUES
@@ -66,78 +60,78 @@ INSERT INTO CUSTOMER VALUES
 
 -- ===================== PURCHASE ===================== --
 INSERT INTO PURCHASE VALUES
-(NULL, DATE("2017-06-15 09:34:21"), 5),
-(NULL, DATE("2017-06-16 09:34:21"), 6),
-(NULL, DATE("2017-06-17 09:34:21"), 7),
-(NULL, DATE("2017-06-18 09:34:21"), 8),
-(NULL, DATE("2017-06-19 09:34:21"), 5),
-(NULL, DATE("2017-06-20 09:34:21"), 6),
-(NULL, DATE("2017-06-21 09:34:21"), 7);
+(NULL, DATE("2017-06-15 09:34:21"), 1),
+(NULL, DATE("2017-06-16 09:34:21"), 2),
+(NULL, DATE("2017-06-17 09:34:21"), 3),
+(NULL, DATE("2017-06-18 09:34:21"), 4),
+(NULL, DATE("2017-06-19 09:34:21"), 1),
+(NULL, DATE("2017-06-20 09:34:21"), 2),
+(NULL, DATE("2017-06-21 09:34:21"), 3);
 
 -- ===================== FEEDBACK ===================== --
 INSERT INTO FEEDBACK VALUES
-(5, NOW(), 3, 'Phản hồi đơn hàng #8', 'Nhân viên thiếu nhiệt tình'),
-(6, NOW(), 4, 'Phản hồi đơn hàng #9', 'Nhân viên tư vấn đúng ý khách hàng'),
-(7, NOW(), 5, 'Phản hồi đơn hàng #10', 'Giá cả phải chăng, chất lượng sản phẩm tốt'),
-(8, NOW(), 1, 'Phản hồi đơn hàng #11', 'Sàn nhà trơn, đi té dập mặt, phải mua thêm băng cá nhân'),
-(5, NOW(), 4, 'Chất lượng sản phẩm', 'Iphone chất lượng cao, bền như Nokia, rơi xuống sàn mà sàn bể còn màn hình không sao');
+(1, '2017-06-21 09:34:21', 3, 'Phản hồi đơn hàng #8', 'Nhân viên thiếu nhiệt tình'),
+(2, '2017-06-22 09:34:21', 4, 'Phản hồi đơn hàng #9', 'Nhân viên tư vấn đúng ý khách hàng'),
+(3, '2017-06-23 09:34:21', 5, 'Phản hồi đơn hàng #10', 'Giá cả phải chăng, chất lượng sản phẩm tốt'),
+(4, '2017-06-24 09:34:21', 1, 'Phản hồi đơn hàng #11', 'Sàn nhà trơn, đi té dập mặt, phải mua thêm băng cá nhân'),
+(1, '2017-06-25 09:34:21', 4, 'Chất lượng sản phẩm', 'Iphone chất lượng cao, bền như Nokia, rơi xuống sàn mà sàn bể còn màn hình không sao');
 
 -- ===================== RESOLVES ===================== --
 INSERT INTO RESOLVES VALUES
-(5, 5, '2021-11-08 21:45:01', NOW(), 'Xin lỗi quý khách vì điều này. Chúng tôi sẽ cải thiện thái độ đối với khách hàng'),
-(7, 6, '2021-11-08 21:45:01', NOW(), 'Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi'),
-(5, 7, '2021-11-08 21:45:01', NOW(), 'Cảm ơn quý khách đã tin tưởng chất lượng sản phẩm của chúng tôi'),
-(7, 8, '2021-11-08 21:45:01', NOW(), 'Thành thật xin lỗi quý khách vì đã xảy ra sự cố ngoài ý muốn này'),
-(5, 5, '2021-11-08 21:46:55', NOW(), 'Cảm ơn quý khách đã tin tưởng chất lượng sản phẩm của chúng tôi');
+(3, 1, '2017-06-21 09:34:21', NOW(), 'Xin lỗi quý khách vì điều này. Chúng tôi sẽ cải thiện thái độ đối với khách hàng'),
+(5, 2, '2017-06-22 09:34:21', NOW(), 'Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi'),
+(3, 3, '2017-06-23 09:34:21', NOW(), 'Cảm ơn quý khách đã tin tưởng chất lượng sản phẩm của chúng tôi'),
+(5, 4, '2017-06-24 09:34:21', NOW(), 'Thành thật xin lỗi quý khách vì đã xảy ra sự cố ngoài ý muốn này'),
+(3, 1, '2017-06-25 09:34:21', NOW(), 'Cảm ơn quý khách đã tin tưởng chất lượng sản phẩm của chúng tôi');
 
 -- ===================== APPLY_FOR_PURCHASE ===================== --
 INSERT INTO APPLY_FOR_PURCHASE VALUES
-(1, 10),
-(2, 11),
-(2, 12),
-(3, 13),
-(3, 14);
+(1, 3, '10%'),
+(2, 4, '5000'),
+(2, 5, '10000'),
+(3, 6, '1000'),
+(3, 7, '10%');
 
--- ===================== APPLY_FOR_PURCHASE ===================== --
+-- ===================== TRANSACTS ===================== --
 INSERT INTO TRANSACTS VALUES
-(2, 8, 1, 1),
-(1, 8, 1, 2),
-(3, 10, 1, 1),
-(4, 8, 1, 2),
-(2, 9, 1, 1),
-(5, 9, 1, 2),
-(5, 11, 1, 2),
-(5, 12, 1, 2),
-(4, 13, 1, 2),
-(5, 14, 1, 2);
+(2, 1, 1, 1),
+(1, 1, 1, 2),
+(3, 3, 1, 1),
+(4, 1, 1, 2),
+(2, 2, 1, 1),
+(5, 2, 1, 2),
+(5, 4, 1, 2),
+(5, 5, 1, 2),
+(4, 6, 1, 2),
+(5, 7, 1, 2);
 
 -- ===================== NOTICES ===================== --
 INSERT INTO NOTICES VALUES
-(5, NOW(), 'Xin chúc mừng bạn đã trở thành khách hàng may mắn đặc biệt của chúng tôi\n
+(3, '2021-11-09 15:26:02', 'Xin chúc mừng bạn đã trở thành khách hàng may mắn đặc biệt của chúng tôi\n
 Bạn được giảm giá đặc biệt 90% cho lần mua hàng có giá trị dưới 1 triệu đồng', 'Giảm giá đặc biệt 90%'),
-(7, NOW() + 1, 'Xin chúc mừng! Bạn đã trở thành khách hàng BẠC !', 'Thăng bậc khách hàng'),
-(7, NOW() + 2, 'Xin chúc mừng! Bạn đã trở thành khách hàng VÀNG !', 'Thăng bậc khách hàng'),
-(5, NOW() + 3, 'Sắp tới sự kiện chào mừng ngày nhà giáo 20/11, săn sale thôi nào ! Hàng ngàn ưu đãi hấp dẫn v.v', 'Sự kiện 20/11');
+(5, '2021-11-09 15:26:03', 'Xin chúc mừng! Bạn đã trở thành khách hàng BẠC !', 'Thăng bậc khách hàng'),
+(5, '2021-11-09 15:26:04', 'Xin chúc mừng! Bạn đã trở thành khách hàng VÀNG !', 'Thăng bậc khách hàng'),
+(3, '2021-11-09 15:26:05', 'Sắp tới sự kiện chào mừng ngày nhà giáo 20/11, săn sale thôi nào ! Hàng ngàn ưu đãi hấp dẫn v.v', 'Sự kiện 20/11');
 
 -- ===================== RECEIVES ===================== --
 INSERT INTO RECEIVES VALUES
-(5, '2021-11-09 15:26:02', 5),
-(5, '2021-11-09 15:26:02', 6),
-(5, '2021-11-09 15:26:02', 7),
-(5, '2021-11-09 15:26:02', 8),
-(7, '2021-11-09 15:26:03', 6),
-(7, '2021-11-09 15:26:03', 7),
-(7, '2021-11-09 15:26:04', 7),
-(7, '2021-11-09 15:26:04', 5),
-(5, '2021-11-09 15:26:05', 7),
-(5, '2021-11-09 15:26:05', 8);
+(3, '2021-11-09 15:26:02', 1),
+(3, '2021-11-09 15:26:02', 2),
+(3, '2021-11-09 15:26:02', 3),
+(3, '2021-11-09 15:26:02', 4),
+(5, '2021-11-09 15:26:03', 2),
+(5, '2021-11-09 15:26:03', 3),
+(5, '2021-11-09 15:26:04', 3),
+(5, '2021-11-09 15:26:04', 1),
+(3, '2021-11-09 15:26:05', 3),
+(3, '2021-11-09 15:26:05', 4);
 
 -- ===================== OWNS ===================== --
 INSERT INTO OWNS VALUES
-(1, 5),
-(3, 5),
-(2, 6),
-(4, 7);
+(1, 1),
+(3, 1),
+(2, 2),
+(4, 3);
 
 -- ===================== DEGREE ===================== --
 INSERT INTO DEGREE VALUES
