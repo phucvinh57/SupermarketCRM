@@ -87,7 +87,7 @@ function CustomerList({ numItemsPerPage, items, active }) {
             </thead>
             <tbody>
                 {currentItems.map(value => {
-                    return <tr>
+                    return <tr key={value.ssn}>
                         <td>{value.ssn}</td>
                         <td>{value.name}</td>
                         <td>{value.birthday}</td>

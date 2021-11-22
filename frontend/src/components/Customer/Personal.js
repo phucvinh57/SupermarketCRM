@@ -239,7 +239,7 @@ function FavourWarehouse(props) {
             <div className='col-2'>Giảm</div>
         </div>
         {favourList.map(value => {
-            return <div className='row rounded border border-1 p-2 mx-1 mb-1 align-items-center'>
+            return <div className='row rounded border border-1 p-2 mx-1 mb-1 align-items-center' key={value.code}>
                 <div className='col-1'>{value.code}</div>
                 <div className='col-3'>{value.description}</div>
                 <div className='col-3'>{value.startDate}</div>

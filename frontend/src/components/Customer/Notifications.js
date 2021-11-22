@@ -4,7 +4,7 @@ export default function Notifications() {
     return <div className='container mt-3' style={{ width: '70%' }}>
         <h4>Thông báo</h4>
         {notifList.map(value => {
-            return <div className='row rounded border border-1 p-2 mx-1 mb-1 align-items-center'>
+            return <div className='row rounded border border-1 p-2 mx-1 mb-1 align-items-center' key={value.title}>
                 <div className='col-4'>
                     <Image src={value.imageURL} alt='img' />
                 </div>
