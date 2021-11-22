@@ -3,6 +3,7 @@ import { Button, Form, Modal, Table } from 'react-bootstrap'
 import styled from 'styled-components'
 import { Eye, Trash } from 'react-bootstrap-icons'
 import ReactPaginate from 'react-paginate'
+import { SideLink, activeLink } from '../SideLinkStyle';
 const avatarLink = `https://vcdn-giaitri.vnecdn.net/2021/09/16/the-godfather-1-1375687021-500-2676-4881-1631806006.jpg`
 
 
@@ -148,10 +149,10 @@ function ShoppingHistory({ numItemsPerPage, items, active }) {
     return <div className='col-9' style={!active ? { display: 'none' } : {}}>
         <h4>Lịch sử mua sắm</h4>
         <div className='row px-1 mb-2'>
-            <Form.Group className='col-6'>
+            <Form.Group className='col-7'>
                 <Form.Control type="text" placeholder="Search for purchase" />
             </Form.Group>
-            <Form.Group className='col-4' >
+            <Form.Group className='col-3' >
                 <Form.Select>
                     <option>Thời gian</option>
                     <option>Điểm tích luỹ</option>
@@ -336,28 +337,7 @@ const ViewDetail = styled(Eye)`
     }
 `;
 
-const activeLink = {
-    color: '#fff',
-    backgroundColor: '#007bff'
-};
-
 const Image = styled.img`
     width: 300px;
     align-self: center;
-`;
-
-const SideLink = styled.a`
-    color: black;
-    padding: 10px;
-    border: 1px solid #ced4da;
-    :first-child {
-        border-bottom: none;
-        border-top-left-radius: 0.25rem;
-        border-top-right-radius: 0.25rem;
-    }
-    :last-child {
-        border-top: none;
-        border-bottom-left-radius: 0.25rem;
-        border-bottom-right-radius: 0.25rem;
-    }
 `;
