@@ -41,8 +41,8 @@ INSERT INTO PRODUCT VALUES
 -- ===================== FAVOUR ===================== --
 INSERT INTO FAVOUR (ID, `name`, `content`, startDate, endDate, mssn) VALUES
 (NULL, 'Giảm giá 20/11', 'Giảm giá hàng năm nhân ngày lễ 20/11', '2021-11-20', '2021-11-24', 1),
-(NULL, 'Giamr giá lễ Noel', NULL, '2021-12-25', '2021-12-27', 1),
-(NULL, 'ăn sale 11/11/2021', NULL, '2021-11-11', NULL, 1);
+(NULL, 'Giảm giá lễ Noel', NULL, '2021-12-25', '2021-12-27', 1),
+(NULL, 'Săn sale 11/11/2021', NULL, '2021-11-11', NULL, 1);
 
 -- ===================== VOUCHER_COUPON ===================== --
 INSERT INTO VOUCHER_COUPON VALUES
@@ -53,10 +53,10 @@ INSERT INTO VOUCHER_COUPON VALUES
 
 -- ===================== CUSTOMER ===================== --
 INSERT INTO CUSTOMER VALUES
-(NULL, 'Jordan', 'Peterson', '0123456789', 'jd.peterson@gmail.com', NULL, 5800, 'Book, gym facilities'),
-(NULL, 'Nhi', 'Vũ Tuệ', '0321654789', 'tue.nhivu@gmail.com', '1996-11-13', 3200, 'Thực phẩm sạch'),
-(NULL, 'Đăng', 'Nguyễn Hải', '0159874263', 'dang.nguyen@gmail.com', '2001-07-05', 1250, 'Đồ điện tử'),
-(NULL, 'Long', 'Nguyễn Hoàng', '0963258741', 'hoanglong@gmail.com', '1993-10-13', 4875, 'Laptop Lenovo Thinkpad');
+(NULL, 'Jordan', 'Peterson', '0123456789', 'jd.peterson@gmail.com', NULL, 5800, 'Book, gym facilities', 'imageUrl'),
+(NULL, 'Nhi', 'Vũ Tuệ', '0321654789', 'tue.nhivu@gmail.com', '1996-11-13', 3200, 'Thực phẩm sạch','imageUrl'),
+(NULL, 'Đăng', 'Nguyễn Hải', '0159874263', 'dang.nguyen@gmail.com', '2001-07-05', 1250, 'Đồ điện tử','imageUrl'),
+(NULL, 'Long', 'Nguyễn Hoàng', '0963258741', 'hoanglong@gmail.com', '1993-10-13', 4875, 'Laptop Lenovo Thinkpad','imageUrl');
 
 -- ===================== PURCHASE ===================== --
 INSERT INTO PURCHASE VALUES
@@ -93,7 +93,7 @@ INSERT INTO APPLY_FOR_PURCHASE VALUES
 (3, 7, '10%');
 
 -- ===================== TRANSACTS ===================== --
-INSERT INTO TRANSACTS VALUES
+INSERT INTO TRANSACTS (productID, purchaseID, SBranchID, numberOfProducts) VALUES
 (2, 1, 1, 1),
 (1, 1, 1, 2),
 (3, 3, 1, 1),
@@ -106,7 +106,7 @@ INSERT INTO TRANSACTS VALUES
 (5, 7, 1, 2);
 
 -- ===================== NOTICES ===================== --
-INSERT INTO NOTICES VALUES
+INSERT INTO NOTICES (ass_ssn, `time`, content, title) VALUES
 (3, '2021-11-09 15:26:02', 'Xin chúc mừng bạn đã trở thành khách hàng may mắn đặc biệt của chúng tôi\n
 Bạn được giảm giá đặc biệt 90% cho lần mua hàng có giá trị dưới 1 triệu đồng', 'Giảm giá đặc biệt 90%'),
 (5, '2021-11-09 15:26:03', 'Xin chúc mừng! Bạn đã trở thành khách hàng BẠC !', 'Thăng bậc khách hàng'),
