@@ -1,12 +1,24 @@
 import { useState, useEffect } from "react"
 import { Form, Button, Table, Modal } from "react-bootstrap";
-import { Search } from "react-bootstrap-icons";
-import { Pencil, Save, Trash } from "react-bootstrap-icons";
+import { Search, Plus, Pencil, Save, Trash, Backspace, ClipboardPlus } from "react-bootstrap-icons";
 import ReactPaginate from "react-paginate";
 
 export default function Favours() {
     const [option, setOption] = useState(0);
+    // Hiện hoặc ẩn box
     const [showFavour, setShowFavour] = useState(false)
+    // Thêm hoặc chỉnh sửa
+    const [favourMode, setFavourMode] = useState('')
+
+    const editFavour = () => {
+        setShowFavour(true)
+        setFavourMode('Chỉnh sửa ưu đãi')
+    }
+
+    const addFavour = () => {
+        setShowFavour(true)
+        setFavourMode('Thêm ưu đãi')
+    }
 
     return <div className='container w-75'>
         <div className='row'>
@@ -36,9 +48,9 @@ export default function Favours() {
                 </div>
             </div>
             <hr />
-            <FavourTable items={favourData} numItemsPerPage={10} setShowFavour={setShowFavour} />
+            <FavourTable items={favourData} numItemsPerPage={10} addFavour={addFavour} editFavour={editFavour} />
         </div>
-        <FavourDetail show={showFavour} onHide={() => setShowFavour(false)} />
+        <FavourDetail show={showFavour} onHide={() => setShowFavour(false)} title={favourMode} />
     </div>
 }
 
@@ -65,7 +77,7 @@ function Options({ option, setOption }) {
     </ul>
 }
 
-function FavourTable({ numItemsPerPage, items, setShowFavour }) {
+function FavourTable({ numItemsPerPage, items, addFavour, editFavour }) {
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
     const [itemOffset, setItemOffset] = useState(0);
@@ -93,7 +105,10 @@ function FavourTable({ numItemsPerPage, items, setShowFavour }) {
                     <th>Ngày kết thúc</th>
                     <th>Giảm giá</th>
                     <th>SL còn lại</th>
-                    <th></th>
+                    <th>
+                        <Plus className='border border-1 rounded p-1' size={26}
+                            onClick={addFavour} />
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -108,7 +123,7 @@ function FavourTable({ numItemsPerPage, items, setShowFavour }) {
                         <td>{value.quantity}</td>
                         <td>
                             <Pencil className='border border-1 rounded p-1' size={26}
-                                onClick={() => setShowFavour(true)} />
+                                onClick={editFavour} />
                         </td>
                     </tr>
                 })}
@@ -143,24 +158,24 @@ function FavourDetail(props) {
     return <Modal size='lg' {...props} centered>
         <Modal.Header closeButton>
             <Modal.Title>
-                Chỉnh sửa ưu đãi
+                {props.title}
             </Modal.Title>
         </Modal.Header>
         <Modal.Body>
             <div className='row'>
-                <Form.Group>
+                <Form.Group className='mb-1'>
                     <Form.Label>Tên:</Form.Label>
-                    <Form.Control type='text' required value={name} onChange={(e) => setName(e.target.value)}/>
+                    <Form.Control type='text' required value={name} onChange={(e) => setName(e.target.value)} />
                 </Form.Group>
-                <Form.Group className='col-6'>
-                    <Form.Label>Trạng thái:</Form.Label>
+                <Form.Group className='col-6 mb-1'>
+                    <Form.Label className='text-danger fw-bold'>Trạng thái:</Form.Label>
                     <Form.Select required>
                         <option>Quá hạn</option>
                         <option>Đang áp dụng</option>
                         <option>Dự kiến</option>
                     </Form.Select>
                 </Form.Group>
-                <Form.Group className='col-6'>
+                <Form.Group className='col-6 mb-1'>
                     <Form.Label>Loại:</Form.Label>
                     <Form.Select required>
                         <option>Voucher</option>
@@ -168,32 +183,41 @@ function FavourDetail(props) {
                         <option>Sale</option>
                     </Form.Select>
                 </Form.Group>
-                <Form.Group className='col-6'>
+                <Form.Group className='col-6 mb-1'>
                     <Form.Label>Ngày bắt đầu:</Form.Label>
                     <Form.Control type='date' required />
                 </Form.Group>
-                <Form.Group className='col-6'>
+                <Form.Group className='col-6 mb-1'>
                     <Form.Label>Ngày kết thúc:</Form.Label>
                     <Form.Control type='date' required />
                 </Form.Group>
-                <Form.Group className='col-6'>
+                <Form.Group className='col-6 mb-1'>
                     <Form.Label>Giảm giá:</Form.Label>
                     <Form.Control type='text' required />
                 </Form.Group>
-                <Form.Group className='col-6'>
+                <Form.Group className='col-6 mb-1'>
                     <Form.Label>Số lượng:</Form.Label>
                     <Form.Control type='number' required />
                 </Form.Group>
             </div>
         </Modal.Body>
-        <Modal.Footer className='justify-content-between'>
-            <Button className='d-flex align-items-center btn-danger float-start'>
-                Xoá <Trash size={20} className='ms-2' />
-            </Button>
-            <Button className='d-flex align-items-center'>
-                Lưu <Save size={20} className='ms-2' />
-            </Button>
-        </Modal.Footer>
+        {props.title === 'Chỉnh sửa ưu đãi' ?
+            <Modal.Footer className='justify-content-between'>
+                <Button className='d-flex align-items-center btn-danger float-start'>
+                    Xoá <Trash size={20} className='ms-2' />
+                </Button>
+                <Button className='d-flex align-items-center'>
+                    Lưu <Save size={20} className='ms-2' />
+                </Button>
+            </Modal.Footer>
+            : <Modal.Footer className='justify-content-between'>
+                <Button className='d-flex align-items-center btn-secondary float-start'>
+                    Huỷ bỏ <Backspace size={20} className='ms-2' />
+                </Button>
+                <Button className='d-flex align-items-center'>
+                    Thêm <ClipboardPlus size={20} className='ms-2' />
+                </Button>
+            </Modal.Footer>}
     </Modal>
 }
 
