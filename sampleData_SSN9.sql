@@ -42,9 +42,9 @@ INSERT INTO PRODUCT VALUES
 
 -- ===================== FAVOUR ===================== --
 INSERT INTO FAVOUR VALUES
-(1, 'Giảm giá 20/11', 'Giảm giá hàng năm nhân ngày lễ 20/11', '2021-11-20', '2021-11-24',100, 1, '111222333'),
-(2, 'Giảm giá lễ Noel','Giảm giá lễ Noel', '2021-12-25', '2021-12-27',100, 1, '111222333'),
-(3, 'Săn sale', 'Săn sale 11/11/2021', '2021-11-10', '2021-11-12', 100, 1, '111222333');
+(1, 'Giảm giá 20/11', 'Giảm giá hàng năm nhân ngày lễ 20/11', '2021-11-20', '2021-11-24',100,'10000', 1, '111222333'),
+(2, 'Giảm giá lễ Noel','Giảm giá lễ Noel', '2021-12-25', '2021-12-27',100,'10%', 1, '111222333'),
+(3, 'Săn sale', 'Săn sale 11/11/2021', '2021-11-10', '2021-11-12', 100,'10000', 1, '111222333');
 
 -- ===================== VOUCHER_COUPON ===================== --
 INSERT INTO VOUCHER_COUPON VALUES
@@ -88,11 +88,11 @@ INSERT INTO RESOLVES VALUES
 
 -- ===================== APPLY_FOR_PURCHASE ===================== --
 INSERT INTO APPLY_FOR_PURCHASE VALUES
-(1, 3, '10%'),
-(2, 4, '5000'),
-(2, 5, '10000'),
-(3, 6, '1000'),
-(3, 7, '10%');
+(1, 3),
+(2, 4),
+(2, 5),
+(3, 6),
+(3, 7);
 
 -- ===================== APPLY_FOR_PURCHASE ===================== --
 INSERT INTO TRANSACTS (productID, purchaseID, SBranchID, numberOfProducts, price, score, discount) VALUES

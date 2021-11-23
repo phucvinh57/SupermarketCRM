@@ -67,13 +67,14 @@ ALTER TABLE PRODUCT ADD (
         ON DELETE SET NULL ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS FAVOUR(
+CREATE TABLE IF NOT EXISTS FAVOUR (
     ID INT PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(100),
     content VARCHAR(100),
     startDate DATE,
     endDate DATE,
     quantity INT,
+    discount VARCHAR(20),
     `status` ENUM('applying', 'planning', 'terminated'), 
     CHECK (startDate < endDate)
 );
@@ -168,7 +169,6 @@ CREATE TABLE IF NOT EXISTS RESOLVES (
 CREATE TABLE IF NOT EXISTS APPLY_FOR_PURCHASE (
     favourID INT,
     purchaseID INT,
-    discount VARCHAR(20),
     PRIMARY KEY (favourID , purchaseID),
     FOREIGN KEY (favourID)
         REFERENCES FAVOUR(ID)
