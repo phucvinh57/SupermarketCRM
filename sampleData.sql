@@ -11,9 +11,9 @@ INSERT INTO EMPLOYEE VALUES
 
 INSERT INTO EMPLOYEE (identityCard, phone, `name`, SBranchID, startWorkingDate) VALUES
 ('987654321', '0357896145', 'Vuơng Thanh Duyên', 1, '2021-09-17'),
-('145697682', '0357896145', 'Lê Nghĩa', 1, '2021-09-17'),
+('145697682', '0357896146', 'Lê Nghĩa', 1, '2021-09-17'),
 ('147852369', '0147852369', 'Nguyễn Văn A', 1, '2021-09-17'),
-('321456987', '0147852369', 'Bùi Văn B', 1, '2021-09-17');
+('321456987', '0147852370', 'Bùi Văn B', 1, '2021-09-17');
 
 INSERT INTO MANAGER
 VALUES (1, 3); -- Nguyễn Phúc Vinh
