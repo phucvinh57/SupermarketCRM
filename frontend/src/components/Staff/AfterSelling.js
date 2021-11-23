@@ -8,7 +8,7 @@ import './modal-response.css'
 
 export default function AfterSelling() {
     const [active, setActive] = useState(0);
-    return <div className='container mt-3'>
+    return <div className='container-fluid mt-3'>
         <div className='row'>
             <SideBar active={active} setActive={setActive} />
             <CustomerList active={active === 0} items={customersData} numItemsPerPage={10} />
@@ -57,7 +57,7 @@ function CustomerList({ numItemsPerPage, items, active }) {
         <div className='row mb-2'>
             <div className='col-8'>
                 <Form.Group>
-                    <FormControl type='text' placeholder='Search customer ...' />
+                    <FormControl type='text' placeholder='Search customer by phone or email...' />
                 </Form.Group>
             </div>
             <div className='col-3'>
@@ -150,10 +150,10 @@ function FeedbackResponse({ numItemsPerPage, items, active }) {
 
     return <div className='col-9' style={active ? {} : { display: 'none' }}>
         <h4>Tiếp nhận phản hồi</h4>
-        <div className='row mb-2'>
-            <div className='col-6'>
+        <div className='row mb-2 justify-content-between'>
+            <div className='col-5'>
                 <Form.Group>
-                    <FormControl type='text' placeholder='Search customer ...' />
+                    <FormControl type='text' placeholder='Search customer by phone or email' />
                 </Form.Group>
             </div>
             <div className='col-2'>
@@ -166,7 +166,7 @@ function FeedbackResponse({ numItemsPerPage, items, active }) {
                     </Form.Select>
                 </Form.Group>
             </div>
-            <div className='col-3'>
+            <div className='col-2'>
                 <Form.Group>
                     <Form.Select>
                         <option>Gần nhất</option>
@@ -174,22 +174,32 @@ function FeedbackResponse({ numItemsPerPage, items, active }) {
                     </Form.Select>
                 </Form.Group>
             </div>
-            <div className='col-1'>
+            <div className='col-2'>
+                <Form.Group>
+                    <Form.Select>
+                        <option>Đã trả lời</option>
+                        <option>Đang chờ</option>
+                    </Form.Select>
+                </Form.Group>
+            </div>
+            <div className='col-1 float-end'>
                 <Button><Search /></Button>
             </div>
         </div>
         <div className='row rounded border border-1 p-2 mx-1 bg-dark text-white mb-1'>
-            <div className='col-3'>Tiêu đề</div>
-            <div className='col-4'>Thời gian</div>
+            <div className='col-2'>Tiêu đề</div>
+            <div className='col-3'>Thời gian</div>
             <div className='col-3'>Tên khách hàng</div>
+            <div className='col-2'>Trạng thái</div>
             <div className='col-2'>Rating</div>
         </div>
         {currentItems.map(value => {
             return <div className='row rounded border border-1 p-2 mx-1 mb-1'
                 key={value.purchaseId}>
-                <div className='col-3 text-primary'><u>{value.title}</u></div>
-                <div className='col-4'>{value.time}</div>
+                <div className='col-2 text-primary'><u>{value.title}</u></div>
+                <div className='col-3'>{value.time}</div>
                 <div className='col-3'>{value.customerName}</div>
+                <div className='col-2'>{value.status ? 'Đã trả lời' : 'Đang chờ'}</div>
                 <div className='col-2 d-flex justify-content-between align-items-center'>
                     <div>{value.rating}/5</div>
                     <Reply size={22} onClick={() => openFeedback(value.content)} />
@@ -235,6 +245,15 @@ function SendNotifs(props) {
                 <Form.Label className='fw-bold'>Tiêu đề:</Form.Label>
                 <Form.Control type="text" placeholder="Tiêu đề" required />
             </Form.Group>
+            <Form.Group className="mb-2">
+                <Form.Label className='fw-bold'>Gửi đến:</Form.Label>
+                <Form.Select>
+                    <option>Khách hàng đồng</option>
+                    <option>Khách hàng bạc</option>
+                    <option>Khách hàng vàng</option>
+                    <option>Tất cả khách hàng</option>
+                </Form.Select>
+            </Form.Group>
 
             <div className='row'>
                 <Form.Group className='mb-2 col-6'>
@@ -249,7 +268,7 @@ function SendNotifs(props) {
 
             <Form.Group className='mb-2'>
                 <Form.Label className='fw-bold'>Nội dung thông báo</Form.Label>
-                <Form.Control as='textarea' rows={10} value={content}
+                <Form.Control as='textarea' rows={8} value={content}
                     onChange={(e) => setContent(e.target.value)} />
             </Form.Group>
 
@@ -320,17 +339,20 @@ const feedbackData = [{
     time: new Date().toLocaleString(),
     customerName: 'Nguyễn Phúc Vinh',
     rating: 5,
+    status: false,
     content: 'Pin ổn, làm việc được 1 ngày ko cần sạc'
 }, {
     title: 'Quần áo',
     time: new Date().toLocaleString(),
     customerName: 'Vương Thanh Duyên',
     rating: 3,
+    status: true,
     content: 'Quần áo bị giãn chun sau 1 tháng mặc'
 }, {
     title: 'Thịt đông lạnh',
     time: new Date().toLocaleString(),
     customerName: 'Lê Nghĩa',
     rating: 4,
+    status: true,
     content: ''
 }]
