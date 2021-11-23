@@ -182,39 +182,39 @@ FROM FAVOUR
 WHERE ID='${favourID}';
 
 -- Quản lý chi nhánh quản lý các mã ưu đãi
--- typeFavour = 1 => Đã quá hạn
--- typeFavour = 2 => Đang áp dụng
--- typeFavour = 3 => Dự kiến, chưa áp dụng
+-- statusValue = 1 => Đang áp dụng
+-- statusValue = 2 => Dự kiến
+-- statusValue = 3 => Quá hạn
 
 delimiter //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GET_FAVOUR_LIST`(IN beginIndex INT, IN numItemsPerPage INT, IN typeFavour INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GET_FAVOUR_LIST`(IN beginIndex INT, IN numItemsPerPage INT, statusValue INT)
 BEGIN
 	SELECT *
 	FROM FAVOUR
-    WHERE (endDate < NOW() AND typeFavour=1) 
-		OR (isFavourApply = 1 AND typeFavour=2)
-        OR (isFavourApply = 0 AND typeFavour=3)
+    WHERE (`status`=statusValue)
 	ORDER BY ID
     LIMIT numItemsPerPage OFFSET beginIndex;
 END // 
 delimiter ;
 
 -- Áp dụng GET_FAVOUR_LIST
-call GET_FAVOUR_LIST('${beginIndex}','${numItemsPerPage}', '${typeFavour}');
+call GET_FAVOUR_LIST('${beginIndex}','${numItemsPerPage}','${statusValue}');
 
 -- ============= 2. Quản lý tạo mới ưu đãi
 -- Quản lý tạo mới ưu đãi
 -- Khi quản lý tạo mới một ưu đãi, nó sẽ được thêm vào danh sách dự kiến áp dụng
-INSERT INTO FAVOUR VALUES ('${favourID}', '${name}', '${content}', '${discount}', '${startDate}', '${endDate}', '${quantity}', '${mssn}');
+INSERT INTO FAVOUR VALUES (NULL, '${name}', '${content}','${startDate}', '${endDate}', '${quantity}', '${discount}','${status}', '${mssn}');
 
 -- Hiển thị ưu đãi
 SELECT *
-FROM FAVOUR;
+FROM FAVOUR
+WHERE ID='${favourID}';
 
--- ============= 3. Quản lý chỉnh sửa ưu đãi, áp dụng, hủy áp dụng và xóa ưu đãi
+-- ============= 3. Quản lý chỉnh sửa ưu đãi và xóa ưu đãi
 -- Quản lý chỉnh sửa ưu đãi
 UPDATE FAVOUR
 SET `name`='${name}',
+	`status`='${status}',
 	`discount`='${discount}',
 	`startDate`='${startDate}',
 	`endDate`='${endDate}',
@@ -222,23 +222,21 @@ SET `name`='${name}',
     `content`='${content}'
 WHERE ID='${favourID}';
 
--- Quản lý áp dụng ưu đãi
-UPDATE FAVOUR
-SET isFavourApply = 1
-WHERE ID='${favourID}';
-
--- Quản lý hủy áp dụng ưu đãi
-UPDATE FAVOUR
-SET isFavourApply = 0
-WHERE ID='${favourID}';
-
 -- Quản lý xóa ưu đãi
 DELETE FROM FAVOUR WHERE ID='${favourID}';
 
 -- ============= 4. Quản lý xem danh sách sản phẩm
 -- Tìm kiếm sản phẩm bằng từ khóa input
-SELECT * FROM PRODUCT WHERE id LIKE '%${input}%' OR `name` LIKE '%${input}%' OR origin LIKE '%${input}%';
+SELECT * FROM PRODUCT WHERE id LIKE '%${input}%' OR `name` LIKE '%${input}%';
 
 -- Trả về danh sách sản phẩm
-SELECT * 
-FROM PRODUCT
+delimiter //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GET_PRODUCT_LIST`(IN beginIndex INT, IN numItemsPerPage INT)
+BEGIN
+	SELECT *
+	FROM PRODUCT
+	ORDER BY ID
+    LIMIT numItemsPerPage OFFSET beginIndex;
+END // 
+delimiter ;
+call GET_PRODUCT_LIST('${beginIndex}','${numItemsPerPage}');
