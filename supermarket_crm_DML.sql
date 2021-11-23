@@ -164,7 +164,7 @@ SELECT * FROM CUSTOMER WHERE phone LIKE '%${input}%' OR email LIKE '%${input}%';
 
 -- Trả về danh sách khách hàng 
 delimiter //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GET_CUSTOMER_LIST`(IN beginIndex INT, IN numItemsPerPage INT, IN typeCustomer INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GET_CUSTOMER_LIST`(IN beginIndex INT, IN numItemsPerPage INT, IN typeCustomer VARCHAR(6))
 BEGIN
 	SELECT *
 	FROM CUSTOMER
