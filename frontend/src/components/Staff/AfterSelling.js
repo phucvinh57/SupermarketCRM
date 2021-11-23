@@ -199,7 +199,11 @@ function FeedbackResponse({ numItemsPerPage, items, active }) {
                 <div className='col-2 text-primary'><u>{value.title}</u></div>
                 <div className='col-3'>{value.time}</div>
                 <div className='col-3'>{value.customerName}</div>
-                <div className='col-2'>{value.status ? 'Đã trả lời' : 'Đang chờ'}</div>
+                <div className='col-2'>
+                    <span className={'badge ' + (value.status ? 'bg-success' : 'bg-secondary')}>
+                        {value.status ? 'Đã trả lời' : 'Đang chờ'}
+                    </span>
+                </div>
                 <div className='col-2 d-flex justify-content-between align-items-center'>
                     <div>{value.rating}/5</div>
                     <Reply size={22} onClick={() => openFeedback(value.content)} />
@@ -231,7 +235,6 @@ function FeedbackResponse({ numItemsPerPage, items, active }) {
         <Feedback show={showFeedback} onHide={() => setShowFeedback(false)} content={feedbackContent} />
     </div>
 }
-
 
 function SendNotifs(props) {
     const [content, setContent] = useState('')
