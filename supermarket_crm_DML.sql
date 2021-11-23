@@ -32,7 +32,8 @@ CREATE PROCEDURE GET_PURCHASE_LIST(IN cssn INT, IN beginIndex INT, IN numItemsPe
         SELECT
             PURCHASE.ID as purchaseID, PURCHASE.`time`, 
             PRODUCT.ID as productID, PRODUCT.`name` as productName,
-            SUPERMARKET_BRANCH.`name` as branchName, SUPERMARKET_BRANCH.`address` as branchAddr, SUPERMARKET_BRANCH.hotline as branchHotline
+            SUPERMARKET_BRANCH.`name` as branchName, SUPERMARKET_BRANCH.`address` as branchAddr, 
+            SUPERMARKET_BRANCH.hotline as branchHotline,
             score, price, numberOfProducts
         FROM (
             PURCHASE JOIN TRANSACTS 
@@ -40,9 +41,8 @@ CREATE PROCEDURE GET_PURCHASE_LIST(IN cssn INT, IN beginIndex INT, IN numItemsPe
             JOIN PRODUCT 
                 ON TRANSACTS.productID = PRODUCT.ID)
         WHERE PURCHASE.cssn = cssn
-        ORDER BY `time` DESC
-        -- ???
         GROUP BY PURCHASE.ID
+        ORDER BY `time` DESC
         LIMIT numItemsPerPage OFFSET beginIndex;
     END //
 delimiter ;
