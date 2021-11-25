@@ -2,7 +2,6 @@ const router = require('express').Router()
 
 router.post('/login', function(req, res) {
     const ssn = req.body.ssn
-    console.log(ssn)
     res.cookie('ssn', ssn, {
         httpOnly: false
     }).status(200).send({ login: true })

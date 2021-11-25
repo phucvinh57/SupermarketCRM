@@ -16,6 +16,7 @@ app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/customer', router.customer);
+app.use('/staff', router.staff)
 app.use('/auth', router.auth);
 
 app.get('/', function (req, res) {
