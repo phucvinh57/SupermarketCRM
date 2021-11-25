@@ -74,6 +74,7 @@ CREATE TABLE IF NOT EXISTS FAVOUR(
     startDate DATE,
     endDate DATE,
     quantity INT,
+    discount VARCHAR(20),
     `status` ENUM('applying', 'planning', 'terminated'), 
     CHECK (startDate < endDate)
 );
@@ -112,7 +113,9 @@ CREATE TABLE IF NOT EXISTS CUSTOMER (
 
 CREATE TABLE IF NOT EXISTS PURCHASE (
     ID INT PRIMARY KEY AUTO_INCREMENT,
-    `time` DATETIME NOT NULL
+    `time` DATETIME NOT NULL,
+    totalPrice FLOAT,
+    totalScore INT
 );
 
 ALTER TABLE PURCHASE ADD (
@@ -168,7 +171,6 @@ CREATE TABLE IF NOT EXISTS RESOLVES (
 CREATE TABLE IF NOT EXISTS APPLY_FOR_PURCHASE (
     favourID INT,
     purchaseID INT,
-    discount VARCHAR(20),
     PRIMARY KEY (favourID , purchaseID),
     FOREIGN KEY (favourID)
         REFERENCES FAVOUR(ID)

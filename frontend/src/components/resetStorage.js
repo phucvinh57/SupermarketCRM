@@ -1,9 +1,11 @@
-const resetStorage = () => {
-    setTimeout(() => {
-        window.location.href = '/'
-        window.localStorage.setItem('mode', '')
-        window.localStorage.setItem('id_ssn', '')
-    }, 1000)
+import AuthService from "../services/auth.service";
+
+const resetStorage = function() {
+    window.location.href = '/'
+    window.localStorage.setItem('mode', '')
+    AuthService.logOut().then(response => {
+        alert(response.data.login)
+    })
 };
 
-module.exports = resetStorage
+export default resetStorage

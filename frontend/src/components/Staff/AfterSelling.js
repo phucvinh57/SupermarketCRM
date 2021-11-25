@@ -292,15 +292,15 @@ function Feedback(props) {
             </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <div className='row' style={{ height: '250px' }}>
+            <div className='row' style={{ height: '220px' }}>
                 <Form.Group className='col-6' style={{ height: '100%' }}>
                     <Form.Label>Nội dung phản hồi</Form.Label>
-                    <Form.Control as='textarea' value={props.content} row={15}
+                    <Form.Control as='textarea' value={props.content} row={9}
                         style={{ height: '90%' }} readOnly />
                 </Form.Group>
                 <Form.Group className='col-6' style={{ height: '100%' }}>
                     <Form.Label>Trả lời phản hồi</Form.Label>
-                    <Form.Control as='textarea' value={reply} row={15} style={{ height: '90%' }}
+                    <Form.Control as='textarea' value={reply} row={9} style={{ height: '90%' }}
                         onChange={e => setReply(e.target.value)} />
                 </Form.Group>
             </div>

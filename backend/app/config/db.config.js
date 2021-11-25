@@ -1,13 +1,25 @@
+const customer = {
+    host: 'localhost',
+    user: 'crm_customer',
+    password: 'phucvinh',
+    database: 'supermarket_crm',
+    dateStrings: true
+}
+const staff = {
+    host: 'localhost',
+    user: 'crm_staff',
+    password: 'phucvinh',
+    database: 'supermarket_crm',
+    dateStrings: true
+}
+const manager = {
+    host: 'localhost',
+    user: 'crm_manager',
+    password: 'phucvinh',
+    database: 'supermarket_crm',
+    dateStrings: true
+}
+
 module.exports = {
-    HOST: "localhost",
-    USER: "root",
-    PASSWORD: "phucvinh",
-    DB: "testdb",
-    dialect: "mysql",
-    pool: {
-        max: 5,
-        min: 0,
-        acquire: 30000,
-        idle: 10000
-    }
+    customer, staff, manager
 };

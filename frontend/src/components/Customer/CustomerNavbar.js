@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { BoxArrowRight } from 'react-bootstrap-icons'
-import { resetStorage } from "../resetStorage"
+import resetStorage from "../resetStorage"
 
 export default function NavBar() {
     return <nav className="navbar navbar-expand navbar-dark bg-dark px-5 d-flex justify-content-between">

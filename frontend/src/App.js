@@ -8,6 +8,7 @@ import { BoxArrowInRight } from 'react-bootstrap-icons';
 import Customer from './components/Customer';
 import Staff from './components/Staff'
 import Manager from './components/Manager'
+import AuthService from './services/auth.service'
 
 export default function App() {
     return (
@@ -60,10 +61,12 @@ function LoginBox(props) {
     const [ssn, setSsn] = useState('');
 
     const login = () => {
-        alert(`You logged in with ${props.mode.slice(1)} role`)
-        window.localStorage.setItem('mode', props.mode)
-        window.localStorage.setItem('id_ssn', ssn)
-        props.redirect()
+        AuthService.logIn(ssn).then(response => {
+            alert(response.data.login)
+            window.localStorage.setItem('mode', props.mode)
+            window.localStorage.setItem('id_ssn', ssn)
+            props.redirect()
+        })
     }
 
     return <Modal size='lg' {...props}>
@@ -76,7 +79,7 @@ function LoginBox(props) {
             <Form>
                 <Form.Group>
                     <Form.Label>Nhập mã SSN/ID</Form.Label>
-                    <Form.Control type='tel' value={ssn} onChange={e => setSsn(e.target.value)} required/>
+                    <Form.Control type='tel' value={ssn} onChange={e => setSsn(e.target.value)} required />
                 </Form.Group>
             </Form>
         </Modal.Body>

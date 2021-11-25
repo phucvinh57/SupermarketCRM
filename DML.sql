@@ -26,7 +26,7 @@ CREATE PROCEDURE GET_PURCHASE_LIST(IN cssn INT, IN beginIndex INT, IN numItemsPe
         SELECT
             PURCHASE.ID as purchaseID, PURCHASE.`time`, 
             PRODUCT.ID as productID, PRODUCT.`name` as productName,
-            SUPERMARKET_BRANCH.`name` as branchName, SUPERMARKET_BRANCH.`address` as branchAddr, SUPERMARKET_BRANCH.hotline as branchHotline
+            SUPERMARKET_BRANCH.`name` as branchName, SUPERMARKET_BRANCH.`address` as branchAddr, SUPERMARKET_BRANCH.hotline as branchHotline,
             score, price, numberOfProducts
         FROM (
             PURCHASE JOIN TRANSACTS 
@@ -35,8 +35,6 @@ CREATE PROCEDURE GET_PURCHASE_LIST(IN cssn INT, IN beginIndex INT, IN numItemsPe
                 ON TRANSACTS.productID = PRODUCT.ID)
         WHERE PURCHASE.cssn = cssn
         ORDER BY `time` DESC
-        -- ???
-        GROUP BY PURCHASE.ID
         LIMIT numItemsPerPage OFFSET beginIndex;
     END //
 delimiter ;
@@ -72,4 +70,75 @@ CREATE PROCEDURE GET_NOTIFICATION_LIST(IN cssn INT, IN beginIndex INT, IN numIte
     END //
 delimiter ;
 
+-- ================== Thống kê biểu đồ tròn về loại sản phẩm mua nhiều nhất ================== --
+SELECT COUNT(*) as `buyTimes` 
+FROM TRANSACTS JOIN PRODUCT ON TRANSACTS.productID = PRODUCT.ID
+WHERE purchaseID IN (
+    SELECT ID FROM PURCHASE
+    WHERE PURCHASE.cssn = '${CustomerSSN}'
+) GROUP BY PRODUCT.categoryName
+ORDER BY `buyTimes`
+LIMIT 5;
+
+-- ================== Thống kê biểu đồ đường về số lần mua hàng ================== --
+-- Theo tuần
+SELECT 
+    COUNT(*) as 'buyTimes', 
+    CONCAT(YEAR(`time`), '/', WEEK(`time`)) as `week`
+FROM PURCHASE JOIN CUSTOMER ON PURCHASE.cssn = CUSTOMER.ssn
+WHERE `time` > '${startTime}' AND `time` <'${endTime}';
+GROUP BY `week`;
+
+-- Theo tháng
+SELECT 
+    COUNT(*) as 'buyTimes', 
+    CONCAT(YEAR(`time`), '/', MONTH(`time`)) as `month`
+FROM PURCHASE JOIN CUSTOMER ON PURCHASE.cssn = CUSTOMER.ssn
+WHERE `time` > '${startTime}' AND `time` <'${endTime}';
+GROUP BY `month`;
+
+-- Theo quý
+SELECT 
+    COUNT(*) as 'buyTimes', 
+    CONCAT(YEAR(`time`), '/', MONTH(`time`) DIV 3) as `quarter`
+FROM PURCHASE JOIN CUSTOMER ON PURCHASE.cssn = CUSTOMER.ssn
+WHERE `time` > '${startTime}' AND `time` <'${endTime}';
+GROUP BY `quarter`;
+
+-- Theo năm
+SELECT 
+    COUNT(*) as 'buyTimes', YEAR(`time`) as `year`
+FROM PURCHASE JOIN CUSTOMER ON PURCHASE.cssn = CUSTOMER.ssn
+WHERE `time` > '${startTime}' AND `time` <'${endTime}';
+GROUP BY `year`;
+
+-- ================== Thống kê biểu đồ cột về điểm tích luỹ mua hàng ================== --
+-- Theo tuần
+SELECT 
+    SUM(totalScore) as `score`, 
+    CONCAT(YEAR(`time`), '/', WEEK(`time`)) as `week`
+FROM PURCHASE JOIN CUSTOMER ON PURCHASE.cssn = CUSTOMER.ssn
+WHERE `time` > '${startTime}' AND `time` <'${endTime}';
+GROUP BY `week`;
+-- Theo tháng
+SELECT 
+    SUM(totalScore) as `score`, 
+    CONCAT(YEAR(`time`), '/', MONTH(`time`)) as `month`
+FROM PURCHASE JOIN CUSTOMER ON PURCHASE.cssn = CUSTOMER.ssn
+WHERE `time` > '${startTime}' AND `time` <'${endTime}';
+GROUP BY `month`;
+-- Theo quý
+SELECT 
+    SUM(totalScore) as `score`, 
+    CONCAT(YEAR(`time`), '/', MONTH(`time`) DIV 3) as `quarter`
+FROM PURCHASE JOIN CUSTOMER ON PURCHASE.cssn = CUSTOMER.ssn
+WHERE `time` > '${startTime}' AND `time` <'${endTime}';
+GROUP BY `quarter`;
+-- Theo năm
+SELECT 
+    SUM(totalScore) as `score`, 
+    YEAR(`time`) as `year`
+FROM PURCHASE JOIN CUSTOMER ON PURCHASE.cssn = CUSTOMER.ssn
+WHERE `time` > '${startTime}' AND `time` <'${endTime}';
+GROUP BY `year`;
 

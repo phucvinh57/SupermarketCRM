@@ -9,7 +9,7 @@ export default function AtPlaceCaring() {
 
     return <div className='container mt-3'>
         <InputGroup className='mb-3 w-75 mx-auto'>
-            <FormControl type='text' placeholder='Search customer by phone number' />
+            <FormControl type='text' placeholder={'Type customer\'s ssn, phone or email'} />
             <InputGroup.Text><Search /></InputGroup.Text>
         </InputGroup>
 
@@ -94,7 +94,7 @@ function Charts(props) {
             </Form.Group>
             <Form.Group className='col-4'>
                 <InputGroup>
-                    <InputGroup.Text>From</InputGroup.Text>
+                    <InputGroup.Text>To</InputGroup.Text>
                     <FormControl type='date' />
                 </InputGroup>
             </Form.Group>
@@ -118,7 +118,7 @@ function Charts(props) {
             </div>
             <div className='mx-auto mt-3 mb-3 col-9 d-flex flex-column align-items-center'>
                 <div className='badge bg-secondary fs-6 rounded-pill'>
-                    Số tiền mua hàng
+                    Điểm tích luỹ
                 </div>
                 <Bar data={barData} options={barOptions} />
             </div>

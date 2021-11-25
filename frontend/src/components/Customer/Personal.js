@@ -3,9 +3,9 @@ import { Button, Form, Modal, Table } from 'react-bootstrap'
 import styled from 'styled-components'
 import { Eye, Trash } from 'react-bootstrap-icons'
 import ReactPaginate from 'react-paginate'
-import { SideLink, activeLink } from '../SideLinkStyle';
-const avatarLink = `https://vcdn-giaitri.vnecdn.net/2021/09/16/the-godfather-1-1375687021-500-2676-4881-1631806006.jpg`
+import DataService from '../../services/customer.service'
 
+import { SideLink, activeLink } from '../SideLinkStyle';
 
 export default function Personal() {
     const [active, setActive] = useState(0);
@@ -35,64 +35,121 @@ function SideBar(props) {
 }
 
 function PersonalInfo(props) {
+    const [info, setInfo] = useState({
+        ssn: '',
+        fname: '',
+        lname: '',
+        email: '',
+        phone: '',
+        birthday: new Date(),
+        imageUrl: '',
+        score: ''
+    })
+
+    const handleFirstName = (e) => {
+        setInfo({ ...info, fname: e.target.value })
+    }
+    const handleLastName = (e) => {
+        setInfo({ ...info, lname: e.target.value })
+    }
+    const handleEmail = (e) => {
+        setInfo({ ...info, email: e.target.value })
+    }
+    const handlePhone = (e) => {
+        setInfo({ ...info, phone: e.target.value })
+    }
+    const handleBirthday = (e) => {
+        setInfo({ ...info, birthday: e.target.value })
+    }
+    const handleFavorite = (e) => {
+        setInfo({ ...info, favorite: e.target.value })
+    }
+    const handleImageURL = (e) => {
+        setInfo({ ...info, imageUrl: e.target.value })
+    }
+
+    const updateInfo = () => {
+        DataService.updatePersonalInfo(info)
+            .then(response => {
+                alert(response.data.msg)
+            })
+    }
+
+    const fetchData = () => {
+        DataService.getPersonalInfo('333344445')
+            .then(response => {
+                console.log(response.data[0])
+                if(response.data.length !== 0)
+                    setInfo(response.data[0])
+            }).catch(err => console.log(err))
+    }
+
+    useEffect(fetchData, [])
+
     return <div className='col-9 row justify-content-between' style={!props.active ? { display: 'none' } : {}}>
         <h4>Hồ sơ khách hàng</h4>
         <Form className='col-8'>
             <Form.Group className="mb-1" controlId="ssn">
                 <Form.Label>Mã khách hàng</Form.Label>
-                <Form.Control type="text" placeholder="Name" value='1azw6zxc' readOnly />
+                <Form.Control type="text" placeholder="Name" value={info.ssn} readOnly />
             </Form.Group>
 
             <div className='row'>
-                <Form.Group className="mb-1 col-6" controlId="fName">
-                    <Form.Label>Họ</Form.Label>
-                    <Form.Control type="text" placeholder="First name" required />
-                </Form.Group>
                 <Form.Group className="mb-1 col-6" controlId="lName">
+                    <Form.Label>Họ</Form.Label>
+                    <Form.Control type="text" placeholder="Last name"
+                        value={info.lname} required onChange={handleLastName} />
+                </Form.Group>
+                <Form.Group className="mb-1 col-6" controlId="fName">
                     <Form.Label>Tên</Form.Label>
-                    <Form.Control type="text" placeholder="Last name" required />
+                    <Form.Control type="text" placeholder="First name" value={info.fname}
+                        onChange={handleFirstName} required />
                 </Form.Group>
             </div>
 
             <div className='row'>
                 <Form.Group className="mb-1 col-6" controlId="emailAddr">
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" required />
+                    <Form.Control type="email" placeholder="Enter email" value={info.email}
+                        onChange={handleEmail} required />
                     <Form.Text className="text-muted">
                         Email của khách hàng sẽ không bị tiết lộ.
                     </Form.Text>
                 </Form.Group>
                 <Form.Group className="mb-1 col-6" controlId="phoneNumber">
                     <Form.Label>Số điện thoại</Form.Label>
-                    <Form.Control type="tel" placeholder="Số điện thoại" required />
+                    <Form.Control type="tel" placeholder="Số điện thoại" value={info.phone}
+                        onChange={handlePhone} required />
                 </Form.Group>
             </div>
 
             <div className='row'>
                 <Form.Group className="mb-1 col-6" controlId="birthday">
                     <Form.Label>Ngày sinh</Form.Label>
-                    <Form.Control type="date" />
+                    <Form.Control type="date" value={String(info.birthday).substr(0, 10)}
+                        onChange={handleBirthday} />
                 </Form.Group>
                 <Form.Group className="mb-1 col-6" controlId="score">
                     <Form.Label>Điểm tích luỹ</Form.Label>
-                    <Form.Control type="text" value={5336} readOnly />
+                    <Form.Control type="text" value={info.score} readOnly />
                 </Form.Group>
             </div>
 
             <Form.Group className='mb-3' controlId="favourite">
                 <Form.Label>Quan tâm, sở thích</Form.Label>
-                <Form.Control as="textarea" style={{ height: '100px' }} />
+                <Form.Control as="textarea" style={{ height: '100px' }} value={info.favorite}
+                    onChange={handleFavorite} />
             </Form.Group>
 
             <div className='d-flex justify-content-between'>
-                <Button className="fw-bold btn-danger">Reset</Button>
-                <Button className="fw-bold btn-success">Save</Button>
+                <Button className="fw-bold btn-danger" onClick={fetchData}>Reset</Button>
+                <Button className="fw-bold btn-success" onClick={updateInfo}>Save</Button>
             </div>
         </Form>
 
         <Form.Group className='col-4 d-flex flex-column justify-content-center' controlId="avatarImage">
-            <Image src={avatarLink} alt='avatar' className='mb-3' />
-            <Form.Control type='file' />
+            <Image src={info.imageUrl} alt='avatar' className='mb-3' />
+            <Form.Control type='url' value={info.imageUrl} onChange={handleImageURL} />
         </Form.Group>
     </div>
 }
@@ -246,7 +303,7 @@ function FavourWarehouse(props) {
                 <div className='col-3'>{value.endDate}</div>
                 <div className='col-2 d-flex justify-content-between'>
                     <div>{value.discount}</div>
-                    <Trash size={16}/>
+                    <Trash size={16} />
                 </div>
             </div>
         })}

@@ -1,3 +1,4 @@
+USE SUPERMARKET_CRM;
 -- ===================== SUPERMARKET BRANCH ===================== --
 INSERT INTO SUPERMARKET_BRANCH (ID, hotline, `address`, `name`) VALUES 
 (1, '0373359726', '4D, Trần Thị Vững, p.An Bình, Dĩ An, Bình Dương', 'Chi nhánh Bình Dương'),
@@ -42,9 +43,9 @@ INSERT INTO PRODUCT VALUES
 
 -- ===================== FAVOUR ===================== --
 INSERT INTO FAVOUR VALUES
-(1, 'Giảm giá 20/11', 'Giảm giá hàng năm nhân ngày lễ 20/11', '2021-11-20', '2021-11-24',100, 1, '111222333'),
-(2, 'Giảm giá lễ Noel','Giảm giá lễ Noel', '2021-12-25', '2021-12-27',100, 1, '111222333'),
-(3, 'Săn sale', 'Săn sale 11/11/2021', '2021-11-10', '2021-11-12', 100, 1, '111222333');
+(1, 'Giảm giá 20/11', 'Giảm giá hàng năm nhân ngày lễ 20/11', '2021-11-20', '2021-11-24', NULL, '0', 'applying', '111222333'),
+(2, 'Giảm giá lễ Noel','Giảm giá lễ Noel', '2021-12-25', '2021-12-27', 1000, '0', 'planning', '111222333'),
+(3, 'Săn sale', 'Săn sale 11/11/2021', '2021-11-10', '2021-11-12', NULL, '0', 'terminated', '111222333');
 
 -- ===================== VOUCHER_COUPON ===================== --
 INSERT INTO VOUCHER_COUPON VALUES
@@ -60,15 +61,15 @@ INSERT INTO CUSTOMER VALUES
 ('333344445', 'Đăng', 'Nguyễn Hải', '0159874263', 'dang.nguyen@gmail.com', '2001-07-05', 1250, 'Đồ điện tử', 'imageUrl'),
 ('444455556', 'Long', 'Nguyễn Hoàng', '0963258741', 'hoanglong@gmail.com', '1993-10-13', 4875, 'Laptop Lenovo Thinkpad', 'imageUrl');
 
--- ===================== PURCHASE ===================== --
-INSERT INTO PURCHASE VALUES
-(1, DATE("2021-10-11 12:00:00"), '111122223'),
-(2, DATE("2021-10-11 12:00:00"), '111122223'),
-(3, DATE("2021-10-11 13:00:00"), '222233334'),
-(4, DATE("2021-10-11 13:00:00"), '222233334'),
-(5, DATE("2021-10-11 13:00:00"), '222233334'),
-(6, DATE("2021-10-11 14:00:00"), '333344445'),
-(7, DATE("2021-10-11 14:00:00"), '333344445');
+-- ===================== DEGREE ===================== --
+INSERT INTO DEGREE VALUES
+('111222333', 'Bachelor Degree of Computer Science in Ho Chi Minh University of Technology'),
+('111222333', 'Master Degree of Computer Science in Ho Chi Minh University of Technology');
+
+-- ===================== OWNS ===================== --
+INSERT INTO OWNS VALUES
+(1, '111122223'),
+(2, '222233334');
 
 -- ===================== FEEDBACK ===================== --
 INSERT INTO FEEDBACK VALUES
@@ -86,15 +87,25 @@ INSERT INTO RESOLVES VALUES
 ('333444555', '222233334', '2021-10-15 18:05:03', '2021-10-15 19:05:03', 'Thành thật xin lỗi quý khách vì đã xảy ra sự cố ngoài ý muốn này'),
 ('333444555', '333344445', '2021-10-16 19:06:04', '2021-10-16 19:36:04', 'Cảm ơn quý khách đã tin tưởng chất lượng sản phẩm của chúng tôi');
 
--- ===================== APPLY_FOR_PURCHASE ===================== --
-INSERT INTO APPLY_FOR_PURCHASE VALUES
-(1, 3, '10%'),
-(2, 4, '5000'),
-(2, 5, '10000'),
-(3, 6, '1000'),
-(3, 7, '10%');
+-- ===================== PURCHASE ===================== --
+INSERT INTO PURCHASE VALUES
+(1, DATE("2021-10-11 12:00:00"), 0, 0, '111122223'),
+(2, DATE("2021-10-11 12:00:00"), 0, 0, '111122223'),
+(3, DATE("2021-10-11 13:00:00"), 0, 0, '222233334'),
+(4, DATE("2021-10-11 13:00:00"), 0, 0, '222233334'),
+(5, DATE("2021-10-11 13:00:00"), 0, 0, '222233334'),
+(6, DATE("2021-10-11 14:00:00"), 0, 0, '333344445'),
+(7, DATE("2021-10-11 14:00:00"), 0, 0, '333344445');
 
 -- ===================== APPLY_FOR_PURCHASE ===================== --
+INSERT INTO APPLY_FOR_PURCHASE VALUES
+(1, 3),
+(2, 4),
+(2, 5),
+(3, 6),
+(3, 7);
+
+-- ===================== TRANSACTS ===================== --
 INSERT INTO TRANSACTS (productID, purchaseID, SBranchID, numberOfProducts, price, score, discount) VALUES
 (2, 1, 1, 1, 100000, 100, '10000'),
 (1, 1, 1, 2, 200000, 200, '5%'),
@@ -108,12 +119,12 @@ INSERT INTO TRANSACTS (productID, purchaseID, SBranchID, numberOfProducts, price
 (5, 7, 1, 2, 100000, 100, '10000');
 
 -- ===================== NOTICES ===================== --
-INSERT INTO NOTICES (ass_ssn, `time`, content, title) VALUES
-('333444555', '2021-11-09 15:26:02', 'Xin chúc mừng bạn đã trở thành khách hàng may mắn đặc biệt của chúng tôi\n
-Bạn được giảm giá đặc biệt 90% cho lần mua hàng có giá trị dưới 1 triệu đồng', 'Giảm giá đặc biệt 90%'),
-('555666777', '2021-11-09 15:26:03', 'Xin chúc mừng! Bạn đã trở thành khách hàng BẠC !', 'Thăng bậc khách hàng'),
-('555666777', '2021-11-09 15:26:04', 'Xin chúc mừng! Bạn đã trở thành khách hàng VÀNG !', 'Thăng bậc khách hàng'),
-('333444555', '2021-11-09 15:26:05', 'Sắp tới sự kiện chào mừng ngày nhà giáo 20/11, săn sale thôi nào ! Hàng ngàn ưu đãi hấp dẫn v.v', 'Sự kiện 20/11');
+INSERT INTO NOTICES (ass_ssn, `time`, content, title, `url`, imageUrl) VALUES
+('333444555', '2021-11-09 15:26:02', 'Thời gian: Áp dụng 1 tuần kể từ thứ 5 25/11/2021\n
+Đối tượng áp dụng: Tất cả khách hàng\n
+Giảm giá 20% cho tất cả các đơn hàng có giá trị trên 1 triệu', 'Ưu đãi cuối năm', 
+'https://www.uuviet.com/tin-tuc/cuoi-nam-ron-rang-muon-van-uu-dai',
+'https://www.uuviet.com/vi/media/image/MediaCategory/media_attachment/2412/nem-uu-viet-lo-xo-cao-su-khuyen-mai-cuoi-nam-uu-dai.jpg');
 
 -- ===================== RECEIVES ===================== --
 INSERT INTO RECEIVES VALUES
@@ -128,12 +139,3 @@ INSERT INTO RECEIVES VALUES
 (333444555, '2021-11-09 15:26:05', 333344445),
 (333444555, '2021-11-09 15:26:05', 444455556);
 
--- ===================== OWNS ===================== --
-INSERT INTO OWNS VALUES
-(1, '111122223'),
-(2, '222233334');
-
--- ===================== DEGREE ===================== --
-INSERT INTO DEGREE VALUES
-('111222333', 'Bachelor Degree of Computer Science in Ho Chi Minh University of Technology'),
-('111222333', 'Master Degree of Computer Science in Ho Chi Minh University of Technology');

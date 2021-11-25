@@ -53,11 +53,15 @@ DROP USER IF EXISTS 'crm_manager'@'localhost';
 CREATE USER 'crm_manager'@'localhost' IDENTIFIED BY 'phucvinh';
 
 -- Thêm, xoá, sửa, cập nhật ưu đãi
-GRANT SELECT, INSERT, DELETE, UPDATE ON SUPERMARKET_CRM.FAVOUR TO 'crm_staff'@'localhost';
-GRANT SELECT, INSERT, DELETE, UPDATE ON SUPERMARKET_CRM.VOUCHER_COUPON TO 'crm_staff'@'localhost';
+GRANT SELECT, INSERT, DELETE, UPDATE ON SUPERMARKET_CRM.FAVOUR TO 'crm_manager'@'localhost';
+GRANT SELECT, INSERT, DELETE, UPDATE ON SUPERMARKET_CRM.VOUCHER_COUPON TO 'crm_manager'@'localhost';
 
 -- Xem thông tin về sản phẩm
-GRANT SELECT ON SUPERMARKET_CRM.PRODUCT TO 'crm_staff'@'localhost';
+GRANT SELECT ON SUPERMARKET_CRM.PRODUCT TO 'crm_manager'@'localhost';
 
 -- Cập nhật cài đặt
 FLUSH PRIVILEGES;
+
+ALTER USER 'crm_customer'@'localhost' IDENTIFIED WITH mysql_native_password BY 'phucvinh';
+ALTER USER 'crm_staff'@'localhost' IDENTIFIED WITH mysql_native_password BY 'phucvinh';
+ALTER USER 'crm_staff'@'localhost' IDENTIFIED WITH mysql_native_password BY 'phucvinh';
