@@ -12,7 +12,7 @@ export default function Personal() {
     return <div className='row pt-2'>
         <SideBar active={active} setActive={setActive} />
         <PersonalInfo active={0 === active} />
-        <ShoppingHistory active={1 === active} items={histories} numItemsPerPage={10} />
+        <ShoppingHistory active={1 === active} numItemsPerPage={2} />
         <FavourWarehouse active={2 === active} />
     </div>
 }
@@ -43,7 +43,8 @@ function PersonalInfo(props) {
         phone: '',
         birthday: new Date(),
         imageUrl: '',
-        score: ''
+        score: '',
+        favorite: ''
     })
 
     const handleFirstName = (e) => {
@@ -78,8 +79,8 @@ function PersonalInfo(props) {
     const fetchData = () => {
         DataService.getPersonalInfo('333344445')
             .then(response => {
-                console.log(response.data[0])
-                if(response.data.length !== 0)
+                // console.log(response.data[0])
+                if (response.data.length !== 0)
                     setInfo(response.data[0])
             }).catch(err => console.log(err))
     }
@@ -137,7 +138,7 @@ function PersonalInfo(props) {
 
             <Form.Group className='mb-3' controlId="favourite">
                 <Form.Label>Quan tâm, sở thích</Form.Label>
-                <Form.Control as="textarea" style={{ height: '100px' }} value={info.favorite}
+                <Form.Control as="textarea" style={{ height: '100px' }} value={info.favorite === null ? '' : info.favorite}
                     onChange={handleFavorite} />
             </Form.Group>
 
@@ -154,53 +155,55 @@ function PersonalInfo(props) {
     </div>
 }
 
-const histories = [{
-    purchaseId: "za5x2q",
-    timestamp: new Date().toLocaleString(),
-    sBranchName: "Chi nhánh Thủ Đức",
-    totalAmount: '500 000đ',
-    totalScore: 100
-}, {
-    purchaseId: "a2xw6a",
-    timestamp: new Date().toLocaleString(),
-    sBranchName: "Chi nhánh Bình Dương",
-    totalAmount: '1000 000đ',
-    totalScore: 200
-}, {
-    purchaseId: "56ae9z",
-    timestamp: new Date().toLocaleString(),
-    sBranchName: "Chi nhánh Bình Dương",
-    totalAmount: '200 000đ',
-    totalScore: 50
-}, {
-    purchaseId: "sw45s6",
-    timestamp: new Date().toLocaleString(),
-    sBranchName: "Chi nhánh Bình Dương",
-    totalAmount: '1000 000đ',
-    totalScore: 100
-}]
+function ShoppingHistory({ numItemsPerPage, active }) {
+    const [histories, setHistories] = useState([{
+        purchaseID: "",
+        time: '',
+        branchName: "",
+        branchHotline: '',
+        branchAddr: '',
+        price: 0,
+        score: 0
+    }]);
 
-function ShoppingHistory({ numItemsPerPage, items, active }) {
+    const [purchaseDetail, setPurchaseDetail] = useState({
+        inherit: {},
+        data: []
+    })
+
     const [showDetail, setShowDetail] = useState(false)
-    const [currentItems, setCurrentItems] = useState([]);
+
+    const [numOfItems, setNumOfItems] = useState(0);
     const [pageCount, setPageCount] = useState(0);
     const [itemOffset, setItemOffset] = useState(0);
 
-    useEffect(() => {
-        // Fetch items from another resources.
-        const endOffset = itemOffset + numItemsPerPage;
-        setCurrentItems(items.slice(itemOffset, endOffset));
-        setPageCount(Math.ceil(items.length / numItemsPerPage));
-    }, [itemOffset, numItemsPerPage, items]);
-
     const handlePageClick = (event) => {
-        const newOffset = (event.selected * numItemsPerPage) % items.length;
+        const newOffset = (event.selected * numItemsPerPage) % numOfItems;
         setItemOffset(newOffset);
     };
 
-    const openModal = () => {
+    const fetchData = () => {
+        DataService.getPurchases(itemOffset, numItemsPerPage).then(response => {
+            setHistories(response.data[0])
+        })
+        DataService.getNumberOfPurchases().then(response => {
+            setNumOfItems(response.data[0].length)
+            setPageCount(Math.ceil(response.data[0].length / numItemsPerPage))
+        })
+    }
+
+    useEffect(fetchData, [itemOffset, numItemsPerPage, numOfItems])
+
+    const openModal = (purchaseID, inherit) => {
         setShowDetail(true);
-        console.log("Open modal ...")
+        DataService.getPurchaseDetail(purchaseID).then(response => {
+            const pDetail = {
+                inherit: inherit,
+                data: response.data
+            }
+            setPurchaseDetail(pDetail)
+            console.log(response.data)
+        })
     }
 
     return <div className='col-9' style={!active ? { display: 'none' } : {}}>
@@ -231,16 +234,23 @@ function ShoppingHistory({ numItemsPerPage, items, active }) {
             <div className='col-2'>Tích luỹ</div>
         </div>
 
-        {currentItems.map(value => {
-            return <div className='row rounded border border-1 p-2 mx-1 justify-content-between mb-1'
-                key={value.purchaseId}>
-                <div className='col-2 text-primary'><u>#{value.purchaseId}</u></div>
-                <div className='col-3'>{value.timestamp}</div>
-                <div className='col-3'>{value.sBranchName}</div>
-                <div className='col-2'>{value.totalAmount}</div>
+        {histories.map(value => {
+            return <div className='row rounded border border-1 p-2 mx-1 justify-content-between mb-1 align-items-center'
+                key={value.purchaseID}>
+                <div className='col-2 text-primary'><u>#{value.purchaseID}</u></div>
+                <div className='col-3'>{value.time}</div>
+                <div className='col-3'>{value.branchName}</div>
+                <div className='col-2'>{value.price}</div>
                 <div className='col-2 d-flex justify-content-between align-items-center'>
-                    <span>{value.totalScore}</span>
-                    <ViewDetail size={22} onClick={openModal} />
+                    <span>{value.score}</span>
+                    <ViewDetail size={22} onClick={() => openModal(value.purchaseID, {
+                        totalPrice: value.price,
+                        totalScore: value.score,
+                        branchName: value.branchName,
+                        branchAddr: value.branchAddr,
+                        branchHotline: value.branchHotline,
+                        time: value.time
+                    })} />
                 </div>
             </div>
         })}
@@ -267,50 +277,13 @@ function ShoppingHistory({ numItemsPerPage, items, active }) {
             />
         </div>
 
-        <PurchaseDetail show={showDetail} onHide={() => setShowDetail(false)} />
+        <PurchaseDetail show={showDetail} onHide={() => setShowDetail(false)} data={purchaseDetail} />
     </div>
 }
-
-const favourList = [{
-    code: "za5x2q",
-    description: "Giảm giá 20% cho tất cả đơn hàng",
-    startDate: new Date().toLocaleString(),
-    endDate: new Date().toLocaleString(),
-    discount: '20%'
-}, {
-    code: "qw2a6w",
-    description: "Giảm giá 500k cho các đồ điện tử có giá trị > 10 triệu",
-    startDate: new Date().toLocaleString(),
-    endDate: new Date().toLocaleString(),
-    discount: '500 000đ'
-}]
-
-function FavourWarehouse(props) {
-    return <div className='col-9 justify-content-between' style={!props.active ? { display: 'none' } : {}}>
-        <h4>Kho lưu trữ ưu đãi</h4>
-        <div className='row rounded border border-1 p-2 mx-1 bg-dark text-white mb-1'>
-            <div className='col-1'>Code</div>
-            <div className='col-3'>Mô tả</div>
-            <div className='col-3'>Ngày áp dụng</div>
-            <div className='col-3'>Ngày hết hạn</div>
-            <div className='col-2'>Giảm</div>
-        </div>
-        {favourList.map(value => {
-            return <div className='row rounded border border-1 p-2 mx-1 mb-1 align-items-center' key={value.code}>
-                <div className='col-1'>{value.code}</div>
-                <div className='col-3'>{value.description}</div>
-                <div className='col-3'>{value.startDate}</div>
-                <div className='col-3'>{value.endDate}</div>
-                <div className='col-2 d-flex justify-content-between'>
-                    <div>{value.discount}</div>
-                    <Trash size={16} />
-                </div>
-            </div>
-        })}
-    </div>
-}
-
 function PurchaseDetail(props) {
+    const inherit = props.data.inherit
+    const data = props.data.data;
+
     return <Modal size='lg' centered {...props} fullscreen>
         <Modal.Header closeButton>
             <Modal.Title>
@@ -334,57 +307,91 @@ function PurchaseDetail(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1424</td>
-                        <td>Kệ đặt dép</td>
-                        <td>Việt Nam</td>
-                        <td>{new Date().toLocaleDateString()}</td>
-                        <td></td>
-                        <td>60 000đ</td>
-                        <td>5%</td>
-                        <td>2</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1424</td>
-                        <td>Kệ đặt dép</td>
-                        <td>Việt Nam</td>
-                        <td>{new Date().toLocaleDateString()}</td>
-                        <td></td>
-                        <td>60 000đ</td>
-                        <td>5%</td>
-                        <td>2</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1424</td>
-                        <td>Kệ đặt dép</td>
-                        <td>Việt Nam</td>
-                        <td>{new Date().toLocaleDateString()}</td>
-                        <td></td>
-                        <td>60 000đ</td>
-                        <td>5%</td>
-                        <td>2</td>
-                        <td>20</td>
-                    </tr>
+                    {data.map(value => {
+                        return <tr key={value.productID}>
+                            <td>{value.productID}</td>
+                            <td>{value.productName}</td>
+                            <td>{value.origin}</td>
+                            <td>{value.mDate}</td>
+                            <td>{value.eDate}</td>
+                            <td>{value.price}</td>
+                            <td>{value.discount}</td>
+                            <td>{value.numberOfProducts}</td>
+                            <td>{value.score}</td>
+                        </tr>
+                    })}
                 </tbody>
             </Table>
             <div className='float-end d-flex flex-column align-items-start fw-bold'>
-                <div className='mb-2'>Tổng giá trị: <span className='badge bg-danger fs-6'>{'500 000đ'}</span></div>
-                <div>Tổng điểm tích luỹ: <span className='badge bg-success fs-6'>{'50'}</span></div>
+                <div className='mb-2'>Tổng giá trị: <span className='badge bg-danger fs-6'>{inherit.totalPrice + ' VNĐ'}</span></div>
+                <div>Tổng điểm tích luỹ: <span className='badge bg-success fs-6'>{inherit.totalScore}</span></div>
             </div>
             <h5>Nơi mua hàng</h5>
-            <div>Chi nhánh Thủ Đức</div>
-            <div>4D, Trần Thị Vững, p.An Bình, Dĩ An, Bình Dương</div>
-            <div>0373 395 726</div>
+            <div>{inherit.branchName}</div>
+            <div>{inherit.branchAddr}</div>
+            <div>{inherit.branchHotline}</div>
             <h5 className='mt-3'>Thời gian</h5>
-            <div>{new Date().toLocaleString()}</div>
+            <div>{inherit.time}</div>
         </Modal.Body>
         <Modal.Footer>
             <Button onClick={props.onHide}>Đóng</Button>
         </Modal.Footer>
     </Modal>
 }
+
+
+function FavourWarehouse(props) {
+    const [list, setList] = useState([{
+        code: '',
+        content: '',
+        startDate: '',
+        endDate: '',
+        discount: ''
+    }]);
+
+    const removeFavour = (code) => {
+        DataService.removeFavour(code).then(response => {
+            console.log(response.data)
+            const newList = [...list]
+            const idx = newList.findIndex(value => value.code === code);
+            newList.splice(idx, 1)
+            setList(newList)
+        })
+    }
+
+    useEffect(() => {
+        DataService.getFavourList().then(response => {
+            setList(response.data)
+        })
+    }, [])
+
+    return <div className='col-9 justify-content-between' style={!props.active ? { display: 'none' } : {}}>
+        <h4>Kho lưu trữ ưu đãi</h4>
+        <div className='row rounded border border-1 p-2 mx-1 bg-dark text-white mb-1'>
+            <div className='col-1'>Code</div>
+            <div className='col-3'>Mô tả</div>
+            <div className='col-2'>Loại</div>
+            <div className='col-2'>Ngày áp dụng</div>
+            <div className='col-2'>Ngày hết hạn</div>
+            <div className='col-2'>Giảm</div>
+        </div>
+        {list.map(value => {
+            return <div className='row rounded border border-1 p-2 mx-1 mb-1 align-items-center' key={value.code}>
+                <div className='col-1'>{value.code}</div>
+                <div className='col-3'>{value.content}</div>
+                <div className='col-2'>{value.type}</div>
+                <div className='col-2'>{value.startDate}</div>
+                <div className='col-2'>{value.endDate}</div>
+                <div className='col-2 d-flex justify-content-between'>
+                    <div>{value.discount}</div>
+                    <Trash size={16} onClick={() => removeFavour(value.code)} style={{ cursor: 'pointer' }} />
+                </div>
+            </div>
+        })}
+    </div>
+}
+
+
 
 const ViewDetail = styled(Eye)`
     color: gray;

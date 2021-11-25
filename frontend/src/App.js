@@ -72,7 +72,7 @@ function LoginBox(props) {
     return <Modal size='lg' {...props}>
         <Modal.Header closeButton>
             <Modal.Title>
-                Nội dung feedback <u>Quần áo</u>
+                Đăng nhập bằng SSN
             </Modal.Title>
         </Modal.Header>
         <Modal.Body>

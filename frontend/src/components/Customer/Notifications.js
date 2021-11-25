@@ -1,43 +1,77 @@
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import ReactPaginate from 'react-paginate'
+import DataService from '../../services/customer.service'
 
-export default function Notifications() {
+export default function Notifications({ numItemsPerPage }) {
+    const [notifs, setNotifs] = useState([{
+        imageUrl: '',
+        title: '',
+        url: '',
+        content: '',
+        time: ''
+    }])
+
+    const [numOfItems, setNumOfItems] = useState(0);
+    const [pageCount, setPageCount] = useState(0);
+    const [itemOffset, setItemOffset] = useState(0);
+
+    const handlePageClick = (event) => {
+        const newOffset = (event.selected * numItemsPerPage) % numOfItems;
+        setItemOffset(newOffset);
+    };
+
+    const fetchData = () => {
+        DataService.getNotifications(itemOffset, numItemsPerPage).then(response => {
+            // console.log(response.data[0])
+            setNotifs(response.data[0])
+        })
+        DataService.getNumberOfNotifs().then(response => {
+            setNumOfItems(response.data[0].length)
+            setPageCount(Math.ceil(response.data[0].length / numItemsPerPage))
+            // console.log()
+        })
+    }
+
+    useEffect(fetchData, [itemOffset, numItemsPerPage, numOfItems]);
+
     return <div className='container mt-3' style={{ width: '70%' }}>
         <h4>Thông báo</h4>
-        {notifList.map(value => {
+        {notifs.map(value => {
             return <div className='row rounded border border-1 p-2 mx-1 mb-1 align-items-center' key={value.title}>
                 <div className='col-4'>
-                    <Image src={value.imageURL} alt='img' />
+                    <Image src={value.imageUrl} alt='img' />
                 </div>
                 <div className='col-8'>
                     <h6>{value.title}</h6>
-                    <div>Thời gian: Từ ngày <b>{value.startTime}</b> đến ngày <b>{value.endTime}</b></div>
-                    <div>Đối tượng áp dụng: {value.target}</div>
-                    <p>{value.content}</p>
-                    <a href={value.detail} className='float-end'>Chi tiết</a>
+                    <div>{value.content}</div>
+                    <a href={value.url} className='float-end'>Chi tiết</a>
                 </div>
             </div>
         })}
-
+        <div className='float-end mx-1' >
+            <ReactPaginate
+                breakLabel="..."
+                nextLabel=">"
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={5}
+                pageCount={pageCount}
+                previousLabel="<"
+                renderOnZeroPageCount={null}
+                breakClassName={'page-item'}
+                breakLinkClassName={'page-link'}
+                containerClassName={'pagination'}
+                pageClassName={'page-item'}
+                pageLinkClassName={'page-link'}
+                previousClassName={'page-item'}
+                previousLinkClassName={'page-link'}
+                nextClassName={'page-item'}
+                nextLinkClassName={'page-link'}
+                activeClassName={'active'}
+            />
+        </div>
     </div>
 }
-
-const notifList = [{
-    imageURL: `https://www.uuviet.com/vi/media/image/MediaCategory/media_attachment/2412/nem-uu-viet-lo-xo-cao-su-khuyen-mai-cuoi-nam-uu-dai.jpg`,
-    title: 'Ưu đãi cuối năm',
-    startTime: new Date().toDateString(),
-    endTime: new Date().toDateString(),
-    target: `Tất cả khách hàng`,
-    content: `Giảm giá 20% cho tất cả các đơn hàng có giá trị trên 1 triệu`,
-    detail: 'https://www.uuviet.com/tin-tuc/cuoi-nam-ron-rang-muon-van-uu-dai'
-}, {
-    imageURL: 'https://cdn.tgdd.vn/Files/2020/11/18/1307714/hotsale-cuoi-tuan-20-11-mung-ngay-nha-giao-viet-n-1-760x367.png',
-    title: 'Ưu đãi 20/11',
-    startTime: new Date().toDateString(),
-    endTime: new Date().toDateString(),
-    target: `Khách hàng Bạc`,
-    content: `Giảm giá 10% cho tất cả quà tặng 20/11`,
-    detail: 'https://www.dienmayxanh.com/khuyen-mai/hotsale-cuoi-tuan-20-11-mung-ngay-nha-giao-viet-n-1307714'
-}]
 
 const Image = styled.img`
     width: 100%;

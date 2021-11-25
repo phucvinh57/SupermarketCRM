@@ -11,7 +11,7 @@ export default function Customer() {
         <div className="container-fluid px-5">
             <Switch>
                 <Route exact path="/customer" component={Personal} />
-                <Route exact path="/customer/notifications" component={Notifications} />
+                <Route exact path="/customer/notifications" render={() => <Notifications numItemsPerPage={2}/>} />
                 <Route exact path="/customer/feedback" component={Feedback} />
             </Switch>
         </div>
